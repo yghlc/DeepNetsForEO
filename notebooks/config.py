@@ -145,7 +145,7 @@ test_step_size = 64
     MEAN_PIXEL = the mean pixel to remove as data normalization (or None)
     BATCH_SIZE = batch size of the network (adjust according to available memory)
 """
-CAFFE_ROOT = './caffesegnet/'
+CAFFE_ROOT = '../caffe/'
 SOLVER_FILE = './reference_models/solver.prototxt'
 MODEL_FOLDER = './'
 INIT_MODEL = './reference_models/vgg16fc.caffemodel'
