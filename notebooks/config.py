@@ -31,7 +31,7 @@ FLIPS = [False, False]
     BGR : True if we want to reverse the RGB order (Caffe/OpenCV convention)
     label_values : string names for the classes
 """
-BASE_DIR = 'ISPRS/'
+BASE_DIR = '/home/hlc/Data/DeepNetsForEO_test/'
 DATASET = 'Vaihingen'
 FOLDER_SUFFIX = '_fold1'
 BASE_FOLDER = BASE_DIR + DATASET + '/'

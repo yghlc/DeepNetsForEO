@@ -3,3 +3,4 @@
 *.ipynb
 
 "notebooks/Create LMDB.ipynb"
+.idea/
