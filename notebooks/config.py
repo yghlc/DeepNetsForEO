@@ -31,13 +31,19 @@ FLIPS = [False, False]
     BGR : True if we want to reverse the RGB order (Caffe/OpenCV convention)
     label_values : string names for the classes
 """
-BASE_DIR = '/home/hlc/Data/DeepNetsForEO_test/'
-DATASET = 'Vaihingen'
+# BASE_DIR = '/home/hlc/Data/DeepNetsForEO_test/'
+# DATASET = 'EbolingUAV'
+
+BASE_DIR = '/home/hlc/Data/eboling/eboling_uav_images/dom/'
+DATASET = 'EbolingUAV'
+
 FOLDER_SUFFIX = '_fold1'
 BASE_FOLDER = BASE_DIR + DATASET + '/'
 BGR = True
-label_values = ['imp_surfaces', 'building', 'low_vegetation',
-                'tree', 'car', 'clutter']
+# label_values = ['imp_surfaces', 'building', 'low_vegetation',
+#                 'tree', 'car', 'clutter']
+
+label_values = ['non_gully', 'gully']
 # Color palette
 palette = {0: (255, 255, 255),  # Impervious surfaces (white)
            1: (0, 0, 255),      # Buildings (dark blue)
@@ -100,6 +106,14 @@ elif DATASET == 'Vaihingen':
     train_ids = [(1,), (3,), (5,), (7,), (11,), (13,), (15,),
                  (17,),(21,), (23,), (26,), (28,), (30,)]
     test_ids = [(32,), (34,), (37,)]
+
+elif DATASET == 'EbolingUAV':
+    folders = [
+        ('labels', BASE_FOLDER + 'gts_numpy/', 'top_mosaic_09cm_area{}.tif'),
+        ('irrg', BASE_FOLDER + 'top/', 'top_mosaic_09cm_area{}.tif')
+    ]
+    train_ids = [(1,), (3,), (5,), (7,), (11,), (13,), (15,)]
+    test_ids = [(32,)]
 
 # Build the target folder name
 DATASET_DIR = BASE_FOLDER + DATASET.lower() + '_{}_{}_{}'.format(
