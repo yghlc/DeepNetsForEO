@@ -100,7 +100,7 @@ if DATASET == 'Potsdam':
 
 elif DATASET == 'Vaihingen':
     folders = [
-        ('labels', BASE_FOLDER + 'gts_numpy/', 'top_mosaic_09cm_area{}.png'),
+        ('labels', BASE_FOLDER + 'gts_numpy/', 'top_mosaic_09cm_area{}.tif'),
         ('irrg', BASE_FOLDER + 'top/', 'top_mosaic_09cm_area{}.tif')
     ]
     train_ids = [(1,), (3,), (5,), (7,), (11,), (13,), (15,),
@@ -171,4 +171,4 @@ TRAIN_LABEL_SOURCE = DATASET_DIR + 'labels_train_lmdb'
 TEST_DATA_SOURCE = DATASET_DIR + 'irrg_test_lmdb'
 TEST_LABEL_SOURCE = DATASET_DIR + 'labels_test_lmdb'
 MEAN_PIXEL = [81.29, 81.93, 120.90]
-BATCH_SIZE=10
+BATCH_SIZE=30
