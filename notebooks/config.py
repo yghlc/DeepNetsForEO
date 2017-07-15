@@ -109,11 +109,11 @@ elif DATASET == 'Vaihingen':
 
 elif DATASET == 'EbolingUAV':
     folders = [
-        ('labels', BASE_FOLDER + 'gts_numpy/', 'top_mosaic_09cm_area{}.tif'),
-        ('irrg', BASE_FOLDER + 'top/', 'top_mosaic_09cm_area{}.tif')
+        ('labels', BASE_FOLDER + 'gts_numpy/', 'raster_class_version_2_onlyGully_subset_p_{}.tif'),
+        ('irrg', BASE_FOLDER + 'top/', 'UAV_DOM_Eboling_0.48m_Version2_subset_p_{}.tif')
     ]
-    train_ids = [(1,), (3,), (5,), (7,), (11,), (13,), (15,)]
-    test_ids = [(32,)]
+    train_ids = [(0,), (1,), (2,), (3,), (4,), (5,), (7,),(8,)]
+    test_ids = [(6,),(9,)]
 
 # Build the target folder name
 DATASET_DIR = BASE_FOLDER + DATASET.lower() + '_{}_{}_{}'.format(
