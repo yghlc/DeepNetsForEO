@@ -324,11 +324,13 @@ def main(weights, infer_ids, save_dir):
     if BGR:
         transformer.set_channel_swap('data', (2,1,0))
 
-    imgs = [io.imread(BASE_FOLDER + 'top/top_mosaic_09cm_area{}.tif'.format(l)) for l in infer_ids]
+    # imgs = [io.imread(BASE_FOLDER + 'top/top_mosaic_09cm_area{}.tif'.format(l)) for l in infer_ids]
+    imgs = [io.imread(BASE_FOLDER + 'top/UAV_DOM_Eboling_0.48m_Version2_subset_p_{}.tif'.format(l)) for l in infer_ids]
     print "Processing {} images...".format(len(imgs))
     predictions = [process_votes(predict(img, net, transformer, step=test_step_size, patch_size=test_patch_size)) for img in imgs]
 
-    gts = [io.imread(BASE_FOLDER + 'gts_for_participants/top_mosaic_09cm_area{}.tif'.format(l)) for l in infer_ids]
+    # gts = [io.imread(BASE_FOLDER + 'gts_for_participants/top_mosaic_09cm_area{}.tif'.format(l)) for l in infer_ids]
+    gts = [io.imread(BASE_FOLDER + 'gts_numpy/raster_class_version_2_onlyGully_subset_p_{}.tif'.format(l)) for l in infer_ids]
 
     print "Computing metrics..."
     metrics(predictions, gts)
