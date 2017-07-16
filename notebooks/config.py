@@ -43,7 +43,7 @@ BGR = True
 # label_values = ['imp_surfaces', 'building', 'low_vegetation',
 #                 'tree', 'car', 'clutter']
 
-label_values = ['non_gully', 'gully']
+label_values = ['non_gully', 'gully','unknow1','unknow2','unknow3','unkown4']
 # Color palette
 palette = {0: (255, 255, 255),  # Impervious surfaces (white)
            1: (0, 0, 255),      # Buildings (dark blue)
