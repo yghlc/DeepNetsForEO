@@ -35,7 +35,7 @@ FLIPS = [False, False]
 # DATASET = 'EbolingUAV'
 
 BASE_DIR = '/home/hlc/Data/eboling/eboling_uav_images/dom/'
-DATASET = 'EbolingUAV'
+DATASET = 'EbolingUAV_DeepNetEO_2'
 
 FOLDER_SUFFIX = '_fold1'
 BASE_FOLDER = BASE_DIR + DATASET + '/'
@@ -107,13 +107,13 @@ elif DATASET == 'Vaihingen':
                  (17,),(21,), (23,), (26,), (28,), (30,)]
     test_ids = [(32,), (34,), (37,)]
 
-elif DATASET == 'EbolingUAV':
+elif DATASET == 'EbolingUAV_DeepNetEO_2':
     folders = [
-        ('labels', BASE_FOLDER + 'gts_numpy/', 'raster_class_version_2_onlyGully_subset_p_{}.tif'),
-        ('irrg', BASE_FOLDER + 'top/', 'UAV_DOM_Eboling_0.48m_Version2_subset_p_{}.tif')
+        ('labels', BASE_FOLDER + 'gts_numpy/', 'raster_class_version_gps_rtk_3_fix_{}.tif'),
+        ('irrg', BASE_FOLDER + 'top/', 'UAV_DOM_Eboling_0.48m_{}.tif')
     ]
-    train_ids = [(0,), (1,), (2,), (3,), (4,), (5,), (7,),(8,)]
-    test_ids = [(6,),(9,)]
+    train_ids = [(0,), (1,), (2,), (3,), (4,), (5,), (6,),(7,),(8,),(9,),(10,),(11,),(12,),(13,)]
+    test_ids = [(0,),(4,), (5,), (6,),(10,),(11,),(12,)]
 
 # Build the target folder name
 DATASET_DIR = BASE_FOLDER + DATASET.lower() + '_{}_{}_{}'.format(
