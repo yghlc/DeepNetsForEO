@@ -13,8 +13,15 @@ add time: 18 July, 2017
 """
 
 
+
 import sys,os,subprocess
 from optparse import OptionParser
+
+sys.path.append('basic_src')
+
+import basic_src.io_function as io_function
+import vector_features
+import basic_src.RSImageProcess as RSImageProcess
 
 #pyshp library
 import shapefile
@@ -34,19 +41,95 @@ def get_polygons(shp_path):
         return False
 
     if shp_obj.shapeType != 5:
-        print('It is not polygon shapefile')
+        print('It is not a polygon shapefile')
         return False
 
     shapes_list = shp_obj.shapes()
     return shapes_list
 
+def save_polygons_to_shp(polygon_list, base_shp,folder):
+    if len(polygon_list) < 1:
+        print ('Error, there is no polygon in the list')
+        return False
+
+    try:
+        shp_obj = shapefile.Reader(base_shp)
+    except IOError:
+        print("Read file: %s failed: "%base_shp + str(IOError))
+        return False
+
+    save_shp_list = []
+
+    save_id = 0
+    for polygon in polygon_list:
+        w = shapefile.Writer()
+        w.shapeType = shp_obj.shapeType
+
+        filename = os.path.join(folder, os.path.splitext(os.path.basename(base_shp))[0] + '_'+str(save_id)+'.shp')
+        if os.path.isfile(filename) is False:
+            w.field('id')
+            w._shapes.append(polygon)
+            w.record(save_id)
+
+            # copy prj file
+            org_prj = os.path.splitext(base_shp)[0] + ".prj"
+            out_prj = os.path.splitext(filename)[0] + ".prj"
+            io_function.copy_file_to_dst(org_prj, out_prj, overwrite=True)
+
+            # save to file
+            w.save(filename)
+        else:
+            print ('warning: % already exist, skip'%filename)
+
+        save_id += 1
+        save_shp_list.append(filename)
+
+    return save_shp_list
 
 def main(options, args):
+
+    if options.s_width is None:
+        patch_width = 1024
+    else:
+        patch_width = int(options.s_width)
+    if options.s_height is None:
+        patch_height = 1024
+    else:
+        patch_height = int(options.s_width)
+
+    if options.out_dir is None:
+        out_dir = "extract_dir"
+    else:
+        out_dir = options.out_dir
+
+    if os.path.isdir(out_dir) is False:
+        os.makedirs(out_dir)
+
+    buffer_size = 10 # buffer size is 10 meters (in the projection)
+
+
     shp_path = args[0]
     image_path = args[1]
 
+    # get polygons
     polygons = get_polygons(shp_path)
 
+    # buffer polygons (dilation)
+    poly_geos =  [vector_features.shape_from_pyshp_to_shapely(pyshp_polygon) for pyshp_polygon in polygons ]
+    poly_geos_buffer = [ shapely_obj.buffer(buffer_size) for shapely_obj in  poly_geos ]
+
+    #save each polygon to the folder
+    poly_pyshp = [vector_features.shape_from_shapely_to_pyshp(item) for item in poly_geos_buffer]
+
+    polygon_files = save_polygons_to_shp(poly_pyshp,shp_path,out_dir)
+
+    # print (polygon_files)
+    # subset image based on polygon
+    save_id = 0
+    for polygon in polygon_files:
+        Outfilename = os.path.join(out_dir,os.path.splitext(os.path.basename(image_path))[0] + '_'+str(save_id)+'.tif')
+        RSImageProcess.subset_image_by_shapefile(image_path,polygon,Outfilename,True)
+        save_id += 1
 
     pass
 
