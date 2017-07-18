@@ -13,14 +13,14 @@ step_size = 32
     For square patches, valid rotations are 90, 180 and 270.
     e.g. : [] for no rotation, [180] for only 180 rotation, [90, 180]...
 """
-ROTATIONS = []
+ROTATIONS = [90,180,270]
 """ FLIPS :
     [False, False] : no symetry
     [True, False] : up/down symetry only
     [False, True] : left/right symetry only
     [True, True] : both up/down and left/right symetries
 """
-FLIPS = [False, False]
+FLIPS = [True, True]
 
 """
     BASE_DIR: main dataset folder
