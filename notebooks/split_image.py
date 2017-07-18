@@ -16,12 +16,12 @@ def sliding_window(image_width,image_height, patch_w,patch_h):
 
     leftW = int(image_width)%int(patch_w)
     leftH = int(image_height)%int(patch_h)
-    if leftW < patch_w/3:
+    if leftW < patch_w/3 and count_x > 0:
         # count_x = count_x - 1
         leftW = patch_w + leftW
     else:
         count_x = count_x + 1
-    if leftH < patch_h/3:
+    if leftH < patch_h/3 and count_y > 0:
         # count_y = count_y - 1
         leftH = patch_h + leftH
     else:
