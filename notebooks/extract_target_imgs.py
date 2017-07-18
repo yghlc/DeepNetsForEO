@@ -79,7 +79,7 @@ def save_polygons_to_shp(polygon_list, base_shp,folder):
             # save to file
             w.save(filename)
         else:
-            print ('warning: % already exist, skip'%filename)
+            print ('warning: %s already exist, skip'%filename)
 
         save_id += 1
         save_shp_list.append(filename)
