@@ -102,8 +102,15 @@ def main(options, args):
     else:
         out_dir = options.out_dir
 
+    if options.dstnodata is None:
+        dstnodata = 255
+    else:
+        dstnodata = options.dstnodata
+
     if os.path.isdir(out_dir) is False:
         os.makedirs(out_dir)
+
+
 
     buffer_size = 10 # buffer size is 10 meters (in the projection)
 
@@ -128,7 +135,7 @@ def main(options, args):
     save_id = 0
     for polygon in polygon_files:
         Outfilename = os.path.join(out_dir,os.path.splitext(os.path.basename(image_path))[0] + '_'+str(save_id)+'.tif')
-        RSImageProcess.subset_image_by_shapefile(image_path,polygon,Outfilename,True)
+        RSImageProcess.subset_image_by_shapefile(image_path,polygon,Outfilename,dstnodata,True)
         save_id += 1
 
     pass
@@ -148,6 +155,9 @@ if __name__ == "__main__":
     parser.add_option("-o", "--out_dir",
                       action="store", dest="out_dir",
                       help="the folder path for saving output files")
+    parser.add_option("-n", "--dstnodata",
+                      action="store", dest="dstnodata",
+                      help="the nodata in output images")
 
     (options, args) = parser.parse_args()
     if len(sys.argv) < 2 or len(args) < 1:

@@ -196,7 +196,7 @@ def subset_image_srcwin(output,imagefile,xoff,yoff,xsize,ysize):
 def subsetLandsat7_Jakobshavn_shape(imagefile,shapefile,bkeepmidfile):
     return subset_image_by_shapefile(imagefile,shapefile,bkeepmidfile)
 
-def subset_image_by_shapefile(imagefile,shapefile,Outfilename,bkeepmidfile):
+def subset_image_by_shapefile(imagefile,shapefile,Outfilename,dstnodata,bkeepmidfile):
     """
     subset an image by polygons contained in the shapefile
     Args:
@@ -228,7 +228,7 @@ def subset_image_by_shapefile(imagefile,shapefile,Outfilename,bkeepmidfile):
     x_res = abs(orgimg_obj.GetXresolution())
     y_res = abs(orgimg_obj.GetYresolution())
 
-    CommandString = 'gdalwarp '+' -tr ' + str(x_res) + '  '+ str(y_res)+ ' '+ imagefile +' ' + Outfilename +' -cutline ' +shapefile +' -crop_to_cutline ' + ' -overwrite '
+    CommandString = 'gdalwarp '+' -tr ' + str(x_res) + '  '+ str(y_res)+ ' '+ imagefile +' ' + Outfilename +' -cutline ' +shapefile +' -crop_to_cutline ' + ' -overwrite ' + ' -dstnodata ' + str(dstnodata)
     if basic.exec_command_string_one_file(CommandString,Outfilename) is False:
         return False
 
