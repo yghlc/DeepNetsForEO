@@ -91,7 +91,7 @@ def scale(image_np, save_dir, input_filename,scale=[0.5,0.75,1.25,1.5]):
 
     return True
 
-def blurer(image_np, save_dir, input_filename,sigma=[1,2]):
+def blurer(image_np, save_dir, input_filename,is_groud_true,sigma=[1,2]):
     """
     Blur the original images
     Args:
@@ -109,14 +109,18 @@ def blurer(image_np, save_dir, input_filename,sigma=[1,2]):
     ext = os.path.splitext(file_basename)[1]
 
     for value in sigma:
-        blurer = iaa.GaussianBlur(value)
-        images_b = blurer.augment_image(image_np)
-        save_path = os.path.join(save_dir, basename + '_B'+str(value) + ext)
+        save_path = os.path.join(save_dir, basename + '_B' + str(value) + ext)
+        if is_groud_true is True:
+            # just copy the groud true
+            images_b = image_np
+        else:
+            blurer = iaa.GaussianBlur(value)
+            images_b = blurer.augment_image(image_np)
         io.imsave(save_path, images_b)
 
     return True
 
-def image_augment(img_path,save_dir):
+def image_augment(img_path,save_dir,is_groud_true):
     if os.path.isfile(img_path) is False:
         print ("Error, File %s not exist"%img_path)
         return False
@@ -132,7 +136,7 @@ def image_augment(img_path,save_dir):
     if roate(img_test, save_dir, basename, degree=[30, 60, 90, 120, 150, 180]) is False:
         return False
     # scale(img_test,save_dir,basename)
-    if blurer(img_test, save_dir, basename, sigma=[1, 2]) is False:
+    if blurer(img_test, save_dir, basename,is_groud_true, sigma=[1, 2]) is False:
         return False
 
     return True
@@ -149,6 +153,8 @@ def main(options, args):
     if os.path.isdir(out_dir) is False:
         os.makedirs(out_dir)
 
+    is_groud_true = options.ground_truth
+
     img_list_txt = args[0]
     if os.path.isfile(img_list_txt) is False:
         print ("Error, File %s not exist" % img_list_txt)
@@ -159,7 +165,7 @@ def main(options, args):
     for line in files_list:
         file_path  = line.strip()
         print ("Augmentation of image (%d / %d)"%(index,len(files_list)))
-        if image_augment(file_path,out_dir) is False:
+        if image_augment(file_path,out_dir,is_groud_true) is False:
             print ('Error, Failed in image augmentation')
             return False
         index += 1
@@ -178,6 +184,11 @@ if __name__ == "__main__":
     # parser.add_option("-H", "--s_height",
     #                   action="store", dest="s_height",
     #                   help="the height of wanted patch")
+
+    parser.add_option("-g", "--is_ground_truth",
+                      action="store_true", dest="ground_truth",default=False,
+                      help="indicate whether input image is ground true; should not change the pixel value of groud truth")
+
     parser.add_option("-o", "--out_dir",
                       action="store", dest="out_dir",
                       help="the folder path for saving output files")
