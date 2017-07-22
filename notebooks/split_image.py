@@ -10,7 +10,20 @@ add time: 15 July, 2017
 import sys,os,subprocess
 from optparse import OptionParser
 
-def sliding_window(image_width,image_height, patch_w,patch_h):
+def sliding_window(image_width,image_height, patch_w,patch_h,adj_overlay=0):
+    """
+    get the subset windows of each patch
+    Args:
+        image_width: width of input image
+        image_height: height of input image
+        patch_w: the width of the expected patch
+        patch_h: the height of the expected patch
+        adj_overlay: the extended distance (in pixel) to adjacent patch, make each patch has overlay with adjacent patch
+
+    Returns: The list of boundary of each patch
+
+    """
+
     count_x = int(image_width)/int(patch_w)
     count_y = int(image_height)/int(patch_h)
 
@@ -36,14 +49,21 @@ def sliding_window(image_width,image_height, patch_w,patch_h):
                 w = leftW
             if j == count_y - 1:
                 h = leftH
-            new_patch = (i*patch_w, j*patch_h,w, h)
+
+            # extend the patch
+            xoff = max(i*patch_w - adj_overlay,0)  # i*patch_w
+            yoff = max(j*patch_h - adj_overlay, 0) # j*patch_h
+            xsize = min(i*patch_w + w + adj_overlay,image_width) - xoff   #w
+            ysize = min(j*patch_h + h + adj_overlay, image_height) - yoff #h
+
+            new_patch = (xoff,yoff ,xsize, ysize)
             patch_boundary.append(new_patch)
 
     return patch_boundary
 
 
 
-def split_image(input,output_dir,patch_w=1024,patch_h=1024):
+def split_image(input,output_dir,patch_w=1024,patch_h=1024,adj_overlay=0):
     """
     split a large image to many separate patches
     Args:
@@ -69,7 +89,7 @@ def split_image(input,output_dir,patch_w=1024,patch_h=1024):
 
     print('input Width %d  Height %d'%(img_witdh,img_height))
 
-    patch_boundary = sliding_window(img_witdh,img_height,patch_w,patch_h)
+    patch_boundary = sliding_window(img_witdh,img_height,patch_w,patch_h,adj_overlay)
 
     index = 0
     pre_name = os.path.splitext(os.path.basename(input))[0]
@@ -97,14 +117,21 @@ def main(options, args):
     else:
         patch_height = int(options.s_width)
 
+    adj_overlay = 0
+    if options.extend is not None:
+        adj_overlay = options.extend
+
+
     if options.out_dir is None:
-        out_dir = "./"
+        out_dir = "split_save"
     else:
         out_dir = options.out_dir
+    if os.path.isdir(out_dir) is False:
+        os.makedirs(out_dir)
 
     image_path = args[0]
 
-    split_image(image_path,out_dir,patch_width,patch_height)
+    split_image(image_path,out_dir,patch_width,patch_height,adj_overlay)
 
 
     pass
@@ -119,6 +146,9 @@ if __name__ == "__main__":
     parser.add_option("-H", "--s_height",
                       action="store", dest="s_height",
                       help="the height of wanted patches")
+    parser.add_option("-e", "--extend_dis",type=int,
+                      action="store", dest="extend",
+                      help="extend distance (in pixel) of the patch to adjacent patch, make patches overlay each other")
     parser.add_option("-o", "--out_dir",
                       action="store", dest="out_dir",
                       help="the folder path for saving output files")
