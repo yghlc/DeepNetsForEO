@@ -125,8 +125,9 @@ def main(options, args):
         os.makedirs(out_dir)
 
 
-
     buffer_size = 10 # buffer size is 10 meters (in the projection)
+    if options.bufferSize is not None:
+        buffer_size = options.bufferSize
 
 
     shp_path = args[0]
