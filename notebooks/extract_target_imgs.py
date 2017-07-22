@@ -172,7 +172,7 @@ if __name__ == "__main__":
                       action="store", dest="s_height",
                       help="the height of wanted patch")
     parser.add_option("-b", "--bufferSize",
-                      action="store", dest="bufferSize",
+                      action="store", dest="bufferSize",type=float,
                       help="buffer size is in the projection, normally, it is based on meters")
     parser.add_option("-o", "--out_dir",
                       action="store", dest="out_dir",
