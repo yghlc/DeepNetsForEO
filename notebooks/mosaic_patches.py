@@ -15,7 +15,7 @@ from optparse import OptionParser
 
 def mosaic_without_overlap(image_list,out_file):
     output_path = out_file
-    args_list = ['gdal_merge.py', '-init', '0', '-o', output_path]
+    args_list = ['gdal_merge.py', '-init', '0','-a_nodata','0', '-o', output_path]
     args_list.extend(image_list)
     ps = subprocess.Popen(args_list)
     returncode = ps.wait()
